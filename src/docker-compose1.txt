@@ -1,0 +1,37 @@
+version: '3.4'
+
+services:
+  bookify.api:
+    image: ${DOCKER_REGISTRY-}bookifyapi
+    build:
+      context: .
+      dockerfile: Bookify.API\Dockerfile
+
+  bookify-db:
+    image: mysql:latest  # use the latest MySQL image
+    container_name: mysql_container  # optional: name your container
+    environment:
+      MYSQL_ROOT_PASSWORD: bookify  # set the root password
+      MYSQL_DATABASE: bookify  # optional: specify a default database
+      MYSQL_USER: bookify  # optional: create an additional user
+      MYSQL_PASSWORD: bookify  # optional: set the user's password
+    ports:
+      - "5432:5432"  # map the MySQL port to the host
+    volumes:
+      - db_data:/var/lib/mysql  # persist the data
+  
+  bookify-idp:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: Bookify.Identity
+    command: start-dev --import-realm
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    volumes:
+      - ./.containers/identity:/opt/keycloak/data
+      - ./.files/bookify-realm-export.json:/opt/keycloak/data/import/realm.json
+    ports:
+      - 18080:8080
+
+volumes:
+  db_data:

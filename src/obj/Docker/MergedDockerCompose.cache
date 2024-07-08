@@ -1,0 +1,32 @@
+services:
+  bookify-db:
+    container_name: mysql_container
+    environment:
+      MYSQL_DATABASE: bookify
+      MYSQL_PASSWORD: bookify
+      MYSQL_ROOT_PASSWORD: bookify
+      MYSQL_USER: bookify
+    image: mysql:latest
+    ports:
+    - published: 5432
+      target: 5432
+    volumes:
+    - db_data:/var/lib/mysql:rw
+  bookify.api:
+    build:
+      context: C:\Users\jezabalo\source\repos\Bookify
+      dockerfile: Bookify.API\Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTPS_PORTS: '8081'
+      ASPNETCORE_HTTP_PORTS: '8080'
+    image: bookifyapi
+    ports:
+    - target: 8080
+    - target: 8081
+    volumes:
+    - C:\Users\jezabalo\AppData\Roaming\ASP.NET\Https:C:\Users\ContainerUser\AppData\Roaming\ASP.NET\Https:ro
+    - C:\Users\jezabalo\AppData\Roaming\Microsoft\UserSecrets:C:\Users\ContainerUser\AppData\Roaming\Microsoft\UserSecrets:ro
+version: '3.4'
+volumes:
+  db_data: {}

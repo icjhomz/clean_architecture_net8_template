@@ -1,0 +1,84 @@
+name: dockercompose12559829965530206655
+services:
+  bookify-db:
+    container_name: mysql_container
+    environment:
+      MYSQL_DATABASE: bookify
+      MYSQL_PASSWORD: bookify
+      MYSQL_ROOT_PASSWORD: bookify
+      MYSQL_USER: bookify
+    image: mysql:latest
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 5432
+        published: "5432"
+        protocol: tcp
+    volumes:
+      - type: volume
+        source: db_data
+        target: /var/lib/mysql
+        volume: {}
+  bookify-idp:
+    container_name: Bookify.Identity
+    environment:
+      KEYCLOAK_IMPORT: /tmp/bookify-realm-export.json
+      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_USER: admin
+    image: jboss/keycloak:latest
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 8080
+        published: "18080"
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: C:\Users\jezabalo\source\repos\Bookify\.containers\identity
+        target: /opt/jboss/keycloak/standalone/data
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\jezabalo\source\repos\Bookify\.files\bookify-realm-export.json
+        target: /tmp/bookify-realm-export.json
+        bind:
+          create_host_path: true
+  bookify.api:
+    build:
+      context: C:\Users\jezabalo\source\repos\Bookify
+      dockerfile: Bookify.API\Dockerfile.windows
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ASPNETCORE_HTTPS_PORTS: "8081"
+    image: bookifyapi
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 8080
+        protocol: tcp
+      - mode: ingress
+        target: 8081
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: C:\Users\jezabalo\AppData\Roaming/Microsoft/UserSecrets
+        target: C:\Users\ContainerUser\AppData\Roaming\Microsoft\UserSecrets
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\jezabalo\AppData\Roaming/ASP.NET/Https
+        target: C:\Users\ContainerUser\AppData\Roaming\ASP.NET\Https
+        read_only: true
+        bind:
+          create_host_path: true
+networks:
+  default:
+    name: dockercompose12559829965530206655_default
+volumes:
+  db_data:
+    name: dockercompose12559829965530206655_db_data

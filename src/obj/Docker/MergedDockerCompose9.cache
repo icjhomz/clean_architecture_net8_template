@@ -1,0 +1,158 @@
+name: dockercompose12559829965530206655
+services:
+  bookify-db:
+    container_name: mysql_container
+    environment:
+      MYSQL_DATABASE: bookify
+      MYSQL_PASSWORD: bookify
+      MYSQL_ROOT_PASSWORD: bookify
+      MYSQL_USER: bookify
+    image: mysql:latest
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 5432
+        published: "5432"
+        protocol: tcp
+    volumes:
+      - type: volume
+        source: db_data
+        target: /var/lib/mysql
+        volume: {}
+  bookify-idp:
+    container_name: Bookify.Identity
+    environment:
+      KEYCLOAK_IMPORT: /tmp/bookify-realm-export.json
+      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_USER: admin
+    image: jboss/keycloak:latest
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 8080
+        published: "18080"
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: C:\Users\jezabalo\source\repos\Bookify\.containers\identity
+        target: /opt/jboss/keycloak/standalone/data
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\jezabalo\source\repos\Bookify\.files\bookify-realm-export.json
+        target: /tmp/bookify-realm-export.json
+        bind:
+          create_host_path: true
+  bookify.api:
+    build:
+      context: C:\Users\jezabalo\source\repos\Bookify
+      dockerfile: Bookify.API\Dockerfile
+      args:
+        BUILD_CONFIGURATION: Debug
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: Bookify.API
+      target: base
+    container_name: Bookify.API
+    entrypoint:
+      - C:\remote_debugger\x64\msvsmon.exe
+      - /noauth
+      - /anyuser
+      - /silent
+      - /nostatus
+      - /noclrwarn
+      - /nosecuritywarn
+      - /nofirewallwarn
+      - /nowowwarn
+      - /timeout:2147483646
+      - /LogDebuggeeOutputToStdOut
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ASPNETCORE_HTTPS_PORTS: "8081"
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      DOTNET_USE_POLLING_FILE_WATCHER: "1"
+      NUGET_FALLBACK_PACKAGES: c:\.nuget\fallbackpackages
+      NUGET_PACKAGES: C:\.nuget\packages
+    image: bookifyapi:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath c:\.nuget\packages --additionalProbingPath c:\.nuget\fallbackpackages  "C:\app\bin\Debug\net8.0\Bookify.API.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: C:\remote_debugger\x64\utils\KillProcess.exe dotnet.exe
+      com.microsoft.visualstudio.debuggee.program: '"C:\Program Files\dotnet\dotnet.exe"'
+      com.microsoft.visualstudio.debuggee.workingdirectory: C:\app
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 8080
+        protocol: tcp
+      - mode: ingress
+        target: 8081
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: C:\Users\jezabalo\AppData\Roaming/Microsoft/UserSecrets
+        target: C:\Users\ContainerUser\AppData\Roaming\Microsoft\UserSecrets
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\jezabalo\AppData\Roaming/ASP.NET/Https
+        target: C:\Users\ContainerUser\AppData\Roaming\ASP.NET\Https
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\jezabalo\source\repos\Bookify\Bookify.API
+        target: C:\app
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\jezabalo\source\repos\Bookify
+        target: C:\src
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\jezabalo\onecoremsvsmon\17.9.20214.3421
+        target: C:\remote_debugger
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\jezabalo\.nuget\packages\
+        target: c:\.nuget\packages
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Program Files\dotnet\sdk\NuGetFallbackFolder
+        target: c:\.nuget\fallbackpackages
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\TokenService.Proxy\win10-x64\net6.0
+        target: C:\TokenService.Proxy
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\HotReloadProxy\win10-x64\net8.0
+        target: C:\HotReloadProxy
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\HotReload
+        target: C:\HotReloadAgent
+        read_only: true
+        bind:
+          create_host_path: true
+networks:
+  default:
+    name: dockercompose12559829965530206655_default
+volumes:
+  db_data:
+    name: dockercompose12559829965530206655_db_data

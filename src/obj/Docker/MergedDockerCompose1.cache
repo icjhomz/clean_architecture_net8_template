@@ -1,0 +1,60 @@
+services:
+  bookify-db:
+    container_name: mysql_container
+    environment:
+      MYSQL_DATABASE: bookify
+      MYSQL_PASSWORD: bookify
+      MYSQL_ROOT_PASSWORD: bookify
+      MYSQL_USER: bookify
+    image: mysql:latest
+    ports:
+    - published: 5432
+      target: 5432
+    volumes:
+    - db_data:/var/lib/mysql:rw
+  bookify.api:
+    build:
+      args:
+        BUILD_CONFIGURATION: Debug
+      context: C:\Users\jezabalo\source\repos\Bookify
+      dockerfile: Bookify.API\Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: Bookify.API
+      target: base
+    container_name: Bookify.API
+    entrypoint: C:\\remote_debugger\\x64\\msvsmon.exe /noauth /anyuser /silent /nostatus
+      /noclrwarn /nosecuritywarn /nofirewallwarn /nowowwarn /timeout:2147483646 /LogDebuggeeOutputToStdOut
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTPS_PORTS: '8081'
+      ASPNETCORE_HTTP_PORTS: '8080'
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      DOTNET_USE_POLLING_FILE_WATCHER: '1'
+      NUGET_FALLBACK_PACKAGES: c:\.nuget\fallbackpackages
+      NUGET_PACKAGES: C:\.nuget\packages
+    image: bookifyapi:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath c:\.nuget\packages
+        --additionalProbingPath c:\.nuget\fallbackpackages  "C:\app\bin\Debug\net8.0\Bookify.API.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: C:\remote_debugger\x64\utils\KillProcess.exe
+        dotnet.exe
+      com.microsoft.visualstudio.debuggee.program: '"C:\Program Files\dotnet\dotnet.exe"'
+      com.microsoft.visualstudio.debuggee.workingdirectory: C:\app
+    ports:
+    - target: 8080
+    - target: 8081
+    volumes:
+    - C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\HotReload:C:\HotReloadAgent:ro
+    - C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\HotReloadProxy\win10-x64\net8.0:C:\HotReloadProxy:ro
+    - C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\TokenService.Proxy\win10-x64\net6.0:C:\TokenService.Proxy:ro
+    - C:\Users\jezabalo\AppData\Roaming\ASP.NET\Https:C:\Users\ContainerUser\AppData\Roaming\ASP.NET\Https:ro
+    - C:\Users\jezabalo\AppData\Roaming\Microsoft\UserSecrets:C:\Users\ContainerUser\AppData\Roaming\Microsoft\UserSecrets:ro
+    - C:\Users\jezabalo\source\repos\Bookify\Bookify.API:C:\app:rw
+    - C:\Users\jezabalo\onecoremsvsmon\17.9.20214.3421:C:\remote_debugger:ro
+    - C:\Users\jezabalo\source\repos\Bookify:C:\src:rw
+    - C:\Program Files\dotnet\sdk\NuGetFallbackFolder:c:\.nuget\fallbackpackages:ro
+    - C:\Users\jezabalo\.nuget\packages:c:\.nuget\packages:ro
+version: '3.4'
+volumes:
+  db_data: {}

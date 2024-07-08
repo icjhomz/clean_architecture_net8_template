@@ -1,0 +1,6 @@
+{
+  "Bookify.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\Desktop\\bookify\\src\\Bookify.API",
+  "Bookify.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\Desktop\\bookify\\src\\Bookify.Application",
+  "Bookify.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\Desktop\\bookify\\src\\Bookify.Domain",
+  "Bookify.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\Desktop\\bookify\\src\\Bookify.Infrastructure"
+}

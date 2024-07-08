@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "dgSpecHash": "05Kbtasni/Yx0TpQ5P3KRrsSkEDAwdZ7rz2KfXcHIv76jpyV8Nx4D4WpbnH2UCFbf4wDGiGQnuvp2yqkrtMFmA==",
+  "success": true,
+  "projectFilePath": "D:\\Desktop\\bookify\\src\\Bookify.Application\\Bookify.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\jezabalo\\.nuget\\packages\\dapper\\2.1.35\\dapper.2.1.35.nupkg.sha512",
+    "C:\\Users\\jezabalo\\.nuget\\packages\\fluentvalidation\\11.9.1\\fluentvalidation.11.9.1.nupkg.sha512",
+    "C:\\Users\\jezabalo\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.9.1\\fluentvalidation.dependencyinjectionextensions.11.9.1.nupkg.sha512",
+    "C:\\Users\\jezabalo\\.nuget\\packages\\mediatr\\12.2.0\\mediatr.12.2.0.nupkg.sha512",
+    "C:\\Users\\jezabalo\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
+    "C:\\Users\\jezabalo\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.1\\microsoft.extensions.dependencyinjection.abstractions.8.0.1.nupkg.sha512",
+    "C:\\Users\\jezabalo\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.1\\microsoft.extensions.logging.abstractions.8.0.1.nupkg.sha512",
+    "C:\\Users\\jezabalo\\.nuget\\packages\\serilog\\4.0.0\\serilog.4.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
